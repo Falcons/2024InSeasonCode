@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -36,8 +37,28 @@ public class Intake extends SubsystemBase {
     pivot.set(speed);
   }
 
+  public void stopIntakePivot() {
+    pivot.stopMotor();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public Command IntakeNoteCmd(double speed) {
+    return this.startEnd(() -> this.IntakeNote(speed), () -> this.stopIntake());
+  }
+
+  public Command EjectNoteCmd(double speed) {
+    return this.startEnd(() -> this.EjectNote(speed), () -> this.stopIntake());
+  }
+
+  public Command Extend(double speed) {
+    return this.startEnd(() -> this.pivotSpeed(-speed), () -> this.stopIntakePivot());
+  }
+
+  public Command Retract(double speed) {
+    return this.startEnd(() -> this.pivotSpeed(speed), () -> this.stopIntakePivot());
   }
 }
