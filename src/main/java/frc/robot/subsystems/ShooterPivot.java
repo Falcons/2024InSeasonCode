@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterPivot extends SubsystemBase {
   private final CANSparkMax pivot = new CANSparkMax(7,  MotorType.kBrushless);
+  private final SparkAbsoluteEncoder thrubore = pivot.getAbsoluteEncoder();
 
   private final RelativeEncoder pivotEncoder = pivot.getEncoder();
   public ShooterPivot() {}
@@ -28,15 +30,15 @@ public class ShooterPivot extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("encoder", pivotEncoder.getPosition());
+    SmartDashboard.putNumber("encoder", thrubore.getPosition());
   }
 
   public Command Up(double speed) {
-    return this.startEnd(() -> this.setSpeed(speed), () -> this.stopShooterPivot());
+    return this.startEnd(() -> this.setSpeed(-speed), () -> this.stopShooterPivot());
   }
 
   public Command Down(double speed) {
-    return this.startEnd(() -> this.setSpeed(-speed), () -> this.stopShooterPivot());
+    return this.startEnd(() -> this.setSpeed(speed), () -> this.stopShooterPivot());
   }
   
 }

@@ -4,11 +4,10 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.ManualIntakePivot;
@@ -34,6 +33,16 @@ public class RobotContainer {
 
 
   public RobotContainer() {
+    drivetrain.setDefaultCommand(
+      new RunCommand(() -> drivetrain.arcadeDrive(
+        -driver.getLeftY(), 
+        -driver.getRightX()),
+         drivetrain));
+/*
+    climb.setDefaultCommand(new RunCommand(() -> climb.setClimb(
+      -operator.getLeftY() *0.2, -operator.getRightY() *0.2),
+       climb));
+*/
     configureBindings();
   }
 
@@ -49,9 +58,10 @@ public class RobotContainer {
     operator.x().whileTrue(shooter.Shoot(0.5, 0.5));
     operator.y().whileTrue(shooter.Shoot(1, 0.95));
 
-    driver.b().whileTrue(shooterpivot.Up(0.2));
-    driver.x().whileTrue(shooterpivot.Down(0.2));
-    
+    driver.b().whileTrue(shooterpivot.Down(0.1)); //moves shooter down 
+    driver.x().whileTrue(shooterpivot.Up(0.025)); // moves shooter up
+    //0.0125 value to hold pos from encoder value 0.85 to < 0.945 0.945 - 0.955 hold with vaule 0 0.955 < - 0.99 hold  pos with opposite 0.0125
+    //move shoooter with 0.025 value (up) for down let gravity take it
 
     //climb
     driver.y().whileTrue(climb.Up(0.2));

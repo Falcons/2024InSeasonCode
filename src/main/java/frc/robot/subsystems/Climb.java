@@ -21,9 +21,9 @@ public class Climb extends SubsystemBase {
 
   public Climb() {}
 
-  public void setClimb(double speed) {
-    leftClimb.set(speed);
-    rightClimb.set(speed);
+  public void setClimb(double leftSpeed, double rightSpeed) {
+    leftClimb.set(leftSpeed);
+    rightClimb.set(rightSpeed);
   }
 
   public void setLeftClimb(double speed){
@@ -44,10 +44,10 @@ public class Climb extends SubsystemBase {
   }
 
   public Command Up(double speed) {
-    return this.startEnd(() -> this.setClimb(speed), () -> this.stopClimb());
+    return this.startEnd(() -> this.setClimb(speed, speed), () -> this.stopClimb());
   }
 
   public Command Down(double speed) {
-    return this.startEnd(() -> this.setClimb(-speed), () -> this.stopClimb());
+    return this.startEnd(() -> this.setClimb(-speed, -speed), () -> this.stopClimb());
   }
 }
