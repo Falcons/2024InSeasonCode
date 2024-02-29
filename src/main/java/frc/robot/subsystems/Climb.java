@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 
@@ -20,15 +21,33 @@ public class Climb extends SubsystemBase {
 
   public Climb() {}
 
+  public void setClimb(double speed) {
+    leftClimb.set(speed);
+    rightClimb.set(speed);
+  }
+
   public void setLeftClimb(double speed){
     leftClimb.set(speed);
   }
   public void setRightClimb(double speed){
     rightClimb.set(speed);
   }
+
+  public void stopClimb() {
+    leftClimb.stopMotor();
+    rightClimb.stopMotor();
+  }
   
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public Command Up(double speed) {
+    return this.startEnd(() -> this.setClimb(speed), () -> this.stopClimb());
+  }
+
+  public Command Down(double speed) {
+    return this.startEnd(() -> this.setClimb(-speed), () -> this.stopClimb());
   }
 }
