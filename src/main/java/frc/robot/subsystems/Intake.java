@@ -9,18 +9,27 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
-  private final CANSparkMax pivot = new CANSparkMax(10, MotorType.kBrushless);
-  private final CANSparkMax wheels = new CANSparkMax(11, MotorType.kBrushless);
+  private final CANSparkMax pivot = new CANSparkMax(IntakeConstants.pivotID, MotorType.kBrushless);
+  private final CANSparkMax wheels = new CANSparkMax(IntakeConstants.wheelID, MotorType.kBrushless);
 
   private final RelativeEncoder pivotEncoder = pivot.getEncoder();
   private final RelativeEncoder wheelsEncoder = wheels.getEncoder();
 
   public Intake() {}
 
-  public void spinWheels(double speed){
+  public void IntakeNote(double speed){
+    wheels.set(-speed);
+  }
+
+  public void EjectNote(double speed) {
     wheels.set(speed);
+  }
+
+  public void stopIntake() {
+    wheels.stopMotor();
   }
 
   public void pivotSpeed(double speed){

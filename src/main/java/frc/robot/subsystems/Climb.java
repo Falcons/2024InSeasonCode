@@ -9,21 +9,22 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ClimbConstants;
 
 public class Climb extends SubsystemBase {
-  private final CANSparkMax leftLift = new CANSparkMax(9, MotorType.kBrushless);
-  private final CANSparkMax rightLift = new CANSparkMax(8, MotorType.kBrushless);
+  private final CANSparkMax leftClimb = new CANSparkMax(ClimbConstants.leftClimbID, MotorType.kBrushless);
+  private final CANSparkMax rightClimb = new CANSparkMax(ClimbConstants.rightClimbID, MotorType.kBrushless);
 
-  private final RelativeEncoder leftLiftEncoder = leftLift.getEncoder();
-  private final RelativeEncoder rightLiftEncoder = rightLift.getEncoder();
+  private final RelativeEncoder leftLiftEncoder = leftClimb.getEncoder();
+  private final RelativeEncoder rightLiftEncoder = rightClimb.getEncoder();
 
   public Climb() {}
 
   public void setLeftClimb(double speed){
-    leftLift.set(speed);
+    leftClimb.set(speed);
   }
   public void setRightClimb(double speed){
-    rightLift.set(speed);
+    rightClimb.set(speed);
   }
   
   @Override
