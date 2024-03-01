@@ -8,6 +8,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
@@ -18,6 +20,9 @@ public class Climb extends SubsystemBase {
 
   private final RelativeEncoder leftLiftEncoder = leftClimb.getEncoder();
   private final RelativeEncoder rightLiftEncoder = rightClimb.getEncoder();
+
+  //private final DigitalInput leftClimbLimit = new DigitalInput(ClimbConstants.leftClimbLimitPort);
+  //private final DigitalInput rightClimbLimit = new DigitalInput(ClimbConstants.rightClimbLimitPort);
 
   public Climb() {}
 
@@ -40,7 +45,8 @@ public class Climb extends SubsystemBase {
   
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    //SmartDashboard.putBoolean("Left Climb Limit", leftClimbLimit.get());
+    //SmartDashboard.putBoolean("Right Climb Limit", rightClimbLimit.get());
   }
 
   public Command Up(double speed) {
