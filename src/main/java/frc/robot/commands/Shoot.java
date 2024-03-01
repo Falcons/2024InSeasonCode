@@ -5,17 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.Flywheel;
 
 public class Shoot extends Command {
-  private final Shooter shooter;
+  private final Flywheel flywheel;
   private double leftspeed;
   private double rightspeed;
-  public Shoot(Shooter shooter, double leftspeed, double rightspeed) {
-    this.shooter = shooter;
+  public Shoot(Flywheel flywheel, double leftspeed, double rightspeed) {
+    this.flywheel = flywheel;
     this.leftspeed = leftspeed;
     this.rightspeed = rightspeed;
-    addRequirements(shooter);
+    addRequirements(flywheel);
   }
 
   // Called when the command is initially scheduled.
@@ -25,13 +25,13 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.fire(leftspeed, rightspeed);
+    flywheel.set(leftspeed, rightspeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.fire(0,0);
+    flywheel.set(0,0);
   }
 
   // Returns true when the command should end.
