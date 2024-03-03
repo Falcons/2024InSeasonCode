@@ -18,8 +18,6 @@ public class Intake extends SubsystemBase {
   private final CANSparkMax pivot = new CANSparkMax(IntakeConstants.pivotID, MotorType.kBrushless);
   private final CANSparkMax wheels = new CANSparkMax(IntakeConstants.wheelID, MotorType.kBrushless);
 
-  private final RelativeEncoder wheelsEncoder = wheels.getEncoder();
-
   private final SparkAbsoluteEncoder intakeThruBore = pivot.getAbsoluteEncoder();
 
   public Intake() {}

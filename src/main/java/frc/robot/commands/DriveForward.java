@@ -10,6 +10,7 @@ import frc.robot.subsystems.Drivetrain;
 public class DriveForward extends Command {
   private final Drivetrain drivetrain;
   private final double speed;
+  
   public DriveForward(Drivetrain drivetrain, double speed) {
     this.drivetrain = drivetrain;
     this.speed = speed;

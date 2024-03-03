@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-/** Add your docs here. */
 public final class Constants {
     public static final class DriveConstants {
         public static final int frontRightID = 3;
@@ -23,16 +22,21 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int leftFlywheelID = 6;
         public static final int rightFlywheelID = 5;
+
         public static final int pivotID = 7;
+        public static final double pivotThruBoreToRadians = 2.0 * Math.PI / 8192.0;
+
         public static final int pivotBottomLimitPort = 0;
+
 
     }
 
     public static final class ClimbConstants {
         public static final int leftClimbID = 9;
         public static final int rightClimbID = 8;
-        public static final int leftClimbLimitPort = 0;
-        public static final int rightClimbLimitPort = 0;
+
+        public static final int leftClimbLimitPort = 1;
+        public static final int rightClimbLimitPort = 2;
 
     }
 }

@@ -2,18 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.IntakeCommands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 
-public class IntakeNote extends Command {
+public class SetIntakePosition extends Command {
   private final Intake intake;
-  private final double speed;
-  public IntakeNote(Intake intake, double speed) {
+  private final PIDController pid;
+
+  public SetIntakePosition(Intake intake) {
     this.intake = intake;
-    this.speed = speed;
-    addRequirements(intake);
+    this.pid = new PIDController(0, 0, 0);
   }
 
   // Called when the command is initially scheduled.
@@ -23,14 +24,13 @@ public class IntakeNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.IntakeNote(speed);
+    double speed = pid.calculate(0);
+    intake.pivotSpeed(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.stopIntake();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

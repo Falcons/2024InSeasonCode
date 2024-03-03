@@ -23,6 +23,7 @@ public class SetShooterPosition extends Command {
     addRequirements(shooterpivot);
   }
 
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -34,7 +35,7 @@ public class SetShooterPosition extends Command {
   public void execute() {
     double speed = (pid.calculate(shooterpivot.getThruBore(), pos) +
                     armFF.calculate(shooterpivot.getThruBore(), 0));
-    shooterpivot.setSpeed(speed);
+    shooterpivot.setVoltage(speed);
   }
 
   // Called once the command ends or is interrupted.
