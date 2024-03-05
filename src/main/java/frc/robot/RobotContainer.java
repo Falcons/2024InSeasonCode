@@ -4,11 +4,25 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.ShooterCommands.Down;
 import frc.robot.commands.ShooterCommands.Up;
 import frc.robot.subsystems.Climb;
@@ -75,6 +89,54 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    var autoVoltageConstraint =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(
+                DriveConstants.ks,
+                DriveConstants.kv,
+                DriveConstants.ka),
+            DriveConstants.kDriveKinematics,
+            10);
+
+    TrajectoryConfig config =
+        new TrajectoryConfig(
+                DriveConstants.kMaxSpeedMetersPerSecond,
+                DriveConstants.kMaxAccelerationMetersPerSecondSquared)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DriveConstants.kDriveKinematics)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint);
+
+    Trajectory exampleTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)),
+            // Pass config
+            config);
+
+    RamseteCommand ramseteCommand =
+        new RamseteCommand(
+            exampleTrajectory,
+            drivetrain::getPose,
+            new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
+            new SimpleMotorFeedforward(
+                DriveConstants.ks,
+                DriveConstants.kv,
+                DriveConstants.ka),
+            DriveConstants.kDriveKinematics,
+            drivetrain::getWheelSpeeds,
+            new PIDController(DriveConstants.kPVel, 0, 0),
+            new PIDController(DriveConstants.kPVel, 0, 0),
+            // RamseteCommand passes volts to the callback
+            drivetrain::tankDriveVolts,
+            drivetrain);
+        
+    return Commands.runOnce(() -> drivetrain.resetOdometry(exampleTrajectory.getInitialPose()))
+      .andThen(ramseteCommand)
+      .andThen(Commands.runOnce(() -> drivetrain.tankDriveVolts(0, 0)));
   }
 }

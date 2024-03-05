@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -32,8 +33,6 @@ public class Drivetrain extends SubsystemBase {
 
   private final DifferentialDriveOdometry odometry;
 
-  final double kRevToFeet = 1188 * Math.PI / 25296;
-
   public Drivetrain() {
     backRight.follow(frontRight);
     backLeft.follow(frontLeft);
@@ -41,15 +40,19 @@ public class Drivetrain extends SubsystemBase {
     frontRight.setInverted(true);
     drive.setMaxOutput(0.2);
 
-
-    frontLeftEncoder.setPosition(0);
-    frontRightEncoder.setPosition(0);
-    gyro.setYaw(0);
     
-    frontRightEncoder.setPositionConversionFactor(kRevToFeet);
-    frontLeftEncoder.setPositionConversionFactor(kRevToFeet);
-    backRightEncoder.setPositionConversionFactor(kRevToFeet);
-    backLeftEncoder.setPositionConversionFactor(kRevToFeet);
+    //convert to m and m/s
+    frontRightEncoder.setPositionConversionFactor(DriveConstants.RevToMetre);
+    frontLeftEncoder.setPositionConversionFactor(DriveConstants.RevToMetre);
+    backRightEncoder.setPositionConversionFactor(DriveConstants.RevToMetre);
+    backLeftEncoder.setPositionConversionFactor(DriveConstants.RevToMetre);
+
+    frontRightEncoder.setVelocityConversionFactor(DriveConstants.RPMToMetresPerSecond);
+    frontLeftEncoder.setVelocityConversionFactor(DriveConstants.RPMToMetresPerSecond);
+    backRightEncoder.setVelocityConversionFactor(DriveConstants.RPMToMetresPerSecond);
+    backLeftEncoder.setVelocityConversionFactor(DriveConstants.RPMToMetresPerSecond);
+    
+    resetEncoders();
 
     odometry = new DifferentialDriveOdometry(
       gyro.getRotation2d(), frontLeftEncoder.getPosition(), frontRightEncoder.getPosition());
@@ -73,7 +76,52 @@ public class Drivetrain extends SubsystemBase {
     return odometry.getPoseMeters();
   }
 
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(frontLeftEncoder.getVelocity(), frontRightEncoder.getVelocity());
+  }
+
   public void resetOdometry(Pose2d pose) {
     odometry.resetPosition(gyro.getRotation2d(), frontLeftEncoder.getPosition(), frontRightEncoder.getPosition(), pose);
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    frontLeft.setVoltage(leftVolts);
+    frontRight.setVoltage(rightVolts);
+    drive.feed();
+  }
+
+  public void resetEncoders() {
+    frontRightEncoder.setPosition(0);
+    frontLeftEncoder.setPosition(0);
+    backRightEncoder.setPosition(0);
+    backLeftEncoder.setPosition(0);
+  }
+
+  public double getAverageEncoderDistance() {
+    return (frontLeftEncoder.getPosition() + frontRightEncoder.getPosition()) / 2.0;
+  }
+
+  public RelativeEncoder getLeftEncoder() {
+    return frontLeftEncoder;
+  }
+
+  public RelativeEncoder getRightEncoder() {
+    return frontRightEncoder;
+  }
+
+  public void setMaxOutput(double maxOutput) {
+    drive.setMaxOutput(maxOutput);
+  }
+
+  public void zeroHeading() {
+    gyro.reset();
+  }
+
+  public double getHeading() {
+    return gyro.getRotation2d().getDegrees();
+  }
+
+  public double getTurnRate() {
+    return -gyro.getRate();
   }
 }
