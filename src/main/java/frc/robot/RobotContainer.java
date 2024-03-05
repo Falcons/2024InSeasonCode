@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ShooterCommands.Down;
 import frc.robot.commands.ShooterCommands.Up;
 import frc.robot.subsystems.Climb;
@@ -46,6 +47,49 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    // SysID Routines
+    //shooter (up is reverse)
+    driver
+      .b()
+      .and(driver.rightBumper())
+      .onTrue(shooterpivot.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
+      .until(shooterpivot::getSoftUpperLimit));
+    driver
+      .a()
+      .and(driver.rightBumper())
+      .onTrue(shooterpivot.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+      .until(shooterpivot::getSoftBottomLimit));
+    driver
+      .y()
+      .and(driver.rightBumper())
+      .onTrue(shooterpivot.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+      .until(shooterpivot::getSoftUpperLimit));
+    driver
+      .x()
+      .and(driver.rightBumper())
+      .onTrue(shooterpivot.sysIdDynamic(SysIdRoutine.Direction.kForward)
+      .until(shooterpivot::getSoftBottomLimit));
+    
+    //drivetrain
+    driver
+      .a()
+      .and(driver.leftBumper())
+      .whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    driver
+      .b()
+      .and(driver.leftBumper())
+      .whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    driver
+      .x()
+      .and(driver.leftBumper())
+      .whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    driver
+      .y()
+      .and(driver.leftBumper())
+      .whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+    
+/*
     // Intake and Eject
     operator.a().whileTrue(intake.IntakeNoteCmd(0.3));
     operator.b().whileTrue(intake.EjectNoteCmd(1));
@@ -72,6 +116,7 @@ public class RobotContainer {
     // Climb
     driver.y().whileTrue(climb.Up(0.2));
     driver.a().whileTrue(climb.Down(0.2));
+*/
   }
 
   public Command getAutonomousCommand() {
