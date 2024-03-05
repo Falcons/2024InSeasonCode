@@ -54,13 +54,24 @@ public class Drivetrain extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(
       gyro.getRotation2d(), frontLeftEncoder.getPosition(), frontRightEncoder.getPosition());
   }
-
+  public void stopMotors() {
+    frontLeft.stopMotor();
+    frontRight.stopMotor();
+  }
   public void tankDrive(double leftSpeed, double rightSpeed){
     drive.tankDrive(leftSpeed, rightSpeed);
   }
 
   public void arcadeDrive(double speed, double rotation) {
-    drive.arcadeDrive(speed, rotation);
+    if (speed < 0.1 && speed > -0.1) {
+      speed = 0;
+    }
+    if (rotation < 0.1 && rotation > -0.1) {
+      rotation = 0;
+    }
+
+      frontLeft.set(speed + rotation);
+      frontRight.set(speed - rotation);
   }
 
   @Override
