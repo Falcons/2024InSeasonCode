@@ -20,7 +20,8 @@ public class ShooterPivot extends SubsystemBase {
   private final DigitalInput pivotBottomLimit = new DigitalInput(0);
 
   public ShooterPivot() {
-    thruBore.setPositionConversionFactor(ShooterConstants.pivotThruBoreToRadians);
+    //thruBore.setZeroOffset(ShooterConstants.thruBoreZeroOffset);
+    thruBore.setPositionConversionFactor(1);
   }
   
 

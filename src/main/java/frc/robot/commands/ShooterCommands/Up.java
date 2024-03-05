@@ -29,6 +29,7 @@ public class Up extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    shooterpivot.setSpeed(0.05);
     shooterpivot.stopShooterPivot();
   }
 

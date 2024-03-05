@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ArcadeDriveCmd;
 import frc.robot.commands.ShooterCommands.Down;
 import frc.robot.commands.ShooterCommands.Up;
 import frc.robot.subsystems.Climb;
@@ -31,10 +32,9 @@ public class RobotContainer {
 
   public RobotContainer() {
     drivetrain.setDefaultCommand(
-      new RunCommand(() -> drivetrain.arcadeDrive(
-        -driver.getLeftY(), 
-        driver.getRightX()),
-         drivetrain));
+      new ArcadeDriveCmd(drivetrain, 
+      () -> -driver.getLeftY(), 
+      () -> driver.getRightX()));
 
     climb.setDefaultCommand(
       new RunCommand(() -> climb.setClimb(
@@ -63,11 +63,9 @@ public class RobotContainer {
     //driver.b().whileTrue(shooterpivot.Up(0.1));
     driver.b().whileTrue(new Up(shooterpivot, 0.1)); // moves shooter up //0.0125 value to hold pos from encoder value 0.85 to < 0.945 0.945 - 0.955 hold with vaule 0 0.955 < - 0.99 hold  pos with opposite 0.0125, move shoooter with 0.025 value (up) for down let gravity take it
     
-    if (!shooterpivot.getPivotLimit()) {
-      driver.x().whileTrue(shooterpivot.Down(0.1));
-    }
+    //driver.x().whileTrue(shooterpivot.Down(0.1));
     //driver.x().and(pivotLimitSwitch.negate()).onTrue(shooterpivot.Down(0.1));
-    //driver.x().whileTrue(new Down(shooterpivot, 0.1));
+    driver.x().whileTrue(new Down(shooterpivot, 0.1));
 
     // Climb
     driver.y().whileTrue(climb.Up(0.2));

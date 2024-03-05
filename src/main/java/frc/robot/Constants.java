@@ -11,6 +11,9 @@ public final class Constants {
         public static final int backRightID = 1;
         public static final int backLeftID = 2;
 
+        public static final double RevToMetre = 1188.0 * Math.PI / 82991.96;
+        public static final double RPMToMetresPerSecond = 1188.0 * Math.PI / 4979517.6;
+
         public static final int pigeonID = 12;
     }
 
@@ -24,7 +27,9 @@ public final class Constants {
         public static final int rightFlywheelID = 5;
 
         public static final int pivotID = 7;
-        public static final double pivotThruBoreToRadians = 2.0 * Math.PI / 8192.0;
+        public static final double pivotThruBoreToRadians = 2.0 * Math.PI;
+        public static final double thruBoreZeroOffset = 0;
+
 
         public static final int pivotBottomLimitPort = 0;
 
