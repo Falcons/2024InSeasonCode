@@ -6,6 +6,7 @@ package frc.robot.subsystems.Shooter;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkLimitSwitch.Type;
@@ -21,20 +22,35 @@ public class ShooterPivot extends SubsystemBase {
   private final DigitalInput limit = new DigitalInput(0);
   // private final SparkLimitSwitch limit = pivot.getForwardLimitSwitch(Type.kNormallyOpen);
   private final RelativeEncoder pivotEncoder = pivot.getEncoder();
-  public ShooterPivot() {}
+  private final SparkAbsoluteEncoder thruBore = pivot.getAbsoluteEncoder();
+
+  public ShooterPivot() {
+    thruBore.setPositionConversionFactor(ShooterConstants.pivotThruBoreToRadians);
+  }
 
   public void set(double speed) {
     if(limit.get() && speed<0){pivot.stopMotor(); return;}
     pivot.set(speed);
   }
+  public void setVoltage(double voltage){
+    pivot.setVoltage(voltage);
+  }
 
   public void stop() {
     pivot.stopMotor();
+  }
+  public boolean limitPressed(){
+    return limit.get();
+  }
+  public double getPosition(){
+    return thruBore.getPosition();
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("encoder", pivotEncoder.getPosition());
+    SmartDashboard.putNumber("thru bore", thruBore.getPosition());
+    SmartDashboard.putBoolean("shooter pivot limit", limit.get());
   }
 
   public Command Up(double speed) {

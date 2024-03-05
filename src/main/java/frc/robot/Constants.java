@@ -24,6 +24,7 @@ public final class Constants {
         public static final int leftFlywheelID = 6;
         public static final int rightFlywheelID = 5;
         public static final int pivotID = 7;
+        public static final double pivotThruBoreToRadians = 2.0 * Math.PI / 8192.0;
     }
 
     public static final class ClimbConstants {
