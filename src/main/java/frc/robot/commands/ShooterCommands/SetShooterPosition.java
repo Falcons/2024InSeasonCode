@@ -18,7 +18,7 @@ public class SetShooterPosition extends Command {
   public SetShooterPosition(ShooterPivot shooterpivot, double pos) {
     this.shooterpivot = shooterpivot;
     this.pos = pos;
-    this.pid = new PIDController(0.01, 0, 0);
+    this.pid = new PIDController(1, 0, 0);
     this.armFF = new ArmFeedforward(0, 0, 0, 0);
     addRequirements(shooterpivot);
   }
@@ -35,12 +35,14 @@ public class SetShooterPosition extends Command {
   public void execute() {
     double speed = (pid.calculate(shooterpivot.getThruBore(), pos) +
                     armFF.calculate(shooterpivot.getThruBore(), 0));
-    shooterpivot.setVoltage(speed);
+    shooterpivot.setSpeed(-speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    shooterpivot.setSpeed(0.05);
+    shooterpivot.stopShooterPivot();
   }
 
   // Returns true when the command should end.

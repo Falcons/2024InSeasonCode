@@ -45,6 +45,10 @@ public class ShooterPivot extends SubsystemBase {
     shooterPivotMap.put(1.9304, 0.898);
   }
 
+  public double getHash(double key) {
+    return shooterPivotMap.get(key);
+  }
+
   public void setSpeed(double speed) {
     pivot.set(speed);
   }

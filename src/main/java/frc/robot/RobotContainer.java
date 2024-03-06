@@ -67,7 +67,7 @@ public class RobotContainer {
     //driver.x().whileTrue(shooterpivot.Down(0.1));
     //driver.x().and(pivotLimitSwitch.negate()).onTrue(shooterpivot.Down(0.1));
     driver.x().whileTrue(new Down(shooterpivot, 0.1));
-    driver.leftBumper().onTrue(new SetShooterPosition(shooterpivot, 0.93));
+    driver.leftBumper().onTrue(new SetShooterPosition(shooterpivot, 0.95));
 
     // Climb
     driver.y().whileTrue(climb.Up(0.2));
