@@ -7,7 +7,7 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterPivot;
+import frc.robot.subsystems.Shooter.ShooterPivot;
 
 public class SetShooterPosition extends Command {
   private final ShooterPivot shooterpivot;
@@ -33,8 +33,8 @@ public class SetShooterPosition extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = (pid.calculate(shooterpivot.getThruBore(), pos) +
-                    armFF.calculate(shooterpivot.getThruBore(), 0));
+    double speed = (pid.calculate(shooterpivot.getPosition(), pos) +
+                    armFF.calculate(shooterpivot.getPosition(), 0));
     shooterpivot.setVoltage(speed);
   }
 

@@ -29,7 +29,7 @@ public class ShooterPivot extends SubsystemBase {
   }
 
   public void set(double speed) {
-    if(limit.get() && speed<0){pivot.stopMotor(); return;}
+    // if(limit.get() && speed<0){pivot.stopMotor(); return;}
     pivot.set(speed);
   }
   public void setVoltage(double voltage){
@@ -39,11 +39,14 @@ public class ShooterPivot extends SubsystemBase {
   public void stop() {
     pivot.stopMotor();
   }
-  public boolean limitPressed(){
+  public boolean getLimit(){
     return limit.get();
   }
   public double getPosition(){
     return thruBore.getPosition();
+  }
+  public boolean getSoftLimit(){
+    return (thruBore.getPosition() > 0.945);
   }
 
   @Override

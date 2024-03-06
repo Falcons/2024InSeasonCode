@@ -12,6 +12,7 @@ import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeCommands.IntakeNote;
 import frc.robot.commands.IntakeCommands.ManualIntakePivot;
 import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.commands.ShooterCommands.Up;
 import frc.robot.subsystems.Climb.LeftClimb;
 import frc.robot.subsystems.Climb.RightClimb;
 import frc.robot.subsystems.Intake.Wheels;
@@ -41,12 +42,8 @@ public class RobotContainer {
         driver.getRightX()),
          drivetrain));
 
-    climb.setDefaultCommand(
-      new RunCommand(() -> climb.setClimb(
-      -operator.getLeftY(), 
-      -operator.getRightY()),
-       climb));
-
+    leftClimb.setDefaultCommand(new RunCommand(() -> leftClimb.set(-operator.getLeftY())));
+    leftClimb.setDefaultCommand(new RunCommand(() -> rightClimb.set(-operator.getLeftY())));
     configureBindings();
   }
 
@@ -67,7 +64,7 @@ public class RobotContainer {
     //driver.b().whileTrue(shooterpivot.Up(0.1));
     driver.b().whileTrue(new Up(shooterpivot, 0.1)); // moves shooter up //0.0125 value to hold pos from encoder value 0.85 to < 0.945 0.945 - 0.955 hold with vaule 0 0.955 < - 0.99 hold  pos with opposite 0.0125, move shoooter with 0.025 value (up) for down let gravity take it
     
-    if (!shooterpivot.getPivotLimit()) {
+    if (!shooterpivot.getLimit()) {
       driver.x().whileTrue(shooterpivot.Down(0.1));
     }
     //driver.x().and(pivotLimitSwitch.negate()).onTrue(shooterpivot.Down(0.1));

@@ -18,7 +18,7 @@ import frc.robot.Constants.ClimbConstants;
 public class LeftClimb extends SubsystemBase {
   /** Creates a new LeftClimb. */
   private final CANSparkMax climb = new CANSparkMax(ClimbConstants.leftClimbID, MotorType.kBrushless);
-  private final DigitalInput limit = new DigitalInput(ClimbConstants.leftLimitSwitchID);
+  private final DigitalInput limit = new DigitalInput(ClimbConstants.leftClimbLimitPort);
   private final RelativeEncoder encoder = climb.getEncoder();
   public LeftClimb() {}
   

@@ -17,7 +17,7 @@ import frc.robot.Constants.ClimbConstants;
 public class RightClimb extends SubsystemBase {
   /** Creates a new RightClimb. */
     private final CANSparkMax climb = new CANSparkMax(ClimbConstants.rightClimbID, MotorType.kBrushless);
-    private final DigitalInput limit = new DigitalInput(ClimbConstants.rightLimitSwitchID);
+    private final DigitalInput limit = new DigitalInput(ClimbConstants.rightClimbLimitPort);
     private final RelativeEncoder encoder = climb.getEncoder();
   public RightClimb() {}
 
