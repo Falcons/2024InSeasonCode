@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.Shooter;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -10,21 +10,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
-public class Shooter extends SubsystemBase {
+public class Flywheel extends SubsystemBase {
   private final TalonFX leftFlywheel = new TalonFX(ShooterConstants.leftFlywheelID);
   private final TalonFX rightFlywheel = new TalonFX(ShooterConstants.rightFlywheelID);
-
-  public Shooter() {
+  public Flywheel() {
     rightFlywheel.setInverted(true);
   }
 
-  public void fire(double leftSpeed, double rightSpeed) {
+  public void set(double leftSpeed, double rightSpeed) {
     leftFlywheel.set(leftSpeed);
     rightFlywheel.set(rightSpeed);
     
   }
 
-  public void stopShooter() {
+  public void stop() {
     leftFlywheel.stopMotor();
     rightFlywheel.stopMotor();
     
@@ -36,6 +35,6 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command Shoot(double leftSpeed, double rightSpeed) {
-    return this.startEnd(() -> this.fire(leftSpeed, rightSpeed), () -> this.stopShooter());
+    return this.startEnd(() -> this.set(leftSpeed, rightSpeed), () -> this.stop());
   }
 }
