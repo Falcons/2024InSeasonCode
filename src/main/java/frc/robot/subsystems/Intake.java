@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase {
 
   private final SparkAbsoluteEncoder intakeThruBore = pivot.getAbsoluteEncoder();
 
-  private final DigitalInput IntakeLimit = new DigitalInput(IntakeConstants.intakeLimit);
+  private final DigitalInput intakeLimit = new DigitalInput(IntakeConstants.intakeBottomLimit);
 
   public Intake() {}
 
@@ -45,10 +45,18 @@ public class Intake extends SubsystemBase {
     pivot.stopMotor();
   }
 
+  public double getIntakeAngle() {
+    return intakeThruBore.getPosition();
+  }
+
+  public boolean getBottomSoftLimit() {
+    return (intakeThruBore.getPosition() > IntakeConstants.intakeInAngle);
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake Thru Bore", intakeThruBore.getPosition());
-    SmartDashboard.putBoolean("Intake Limit", IntakeLimit.get());
+    SmartDashboard.putBoolean("Intake Limit", intakeLimit.get());
   }
 
   public Command IntakeNoteCmd(double speed) {

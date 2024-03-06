@@ -80,6 +80,7 @@ public class ShooterPivot extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Pivot Encoder", thruBore.getPosition());
+    SmartDashboard.putNumber("Pivot Speed", pivot.get());
     SmartDashboard.putBoolean("Pivot Limit Switch", getPivotLimit());
     SmartDashboard.putBoolean("Soft Limit Enabled", getSoftUpperLimit());
   }
@@ -90,5 +91,5 @@ public class ShooterPivot extends SubsystemBase {
 
   public Command Down(double speed) {
     return this.startEnd(() -> this.setSpeed(speed), () -> this.stopShooterPivot());
-  } 
+  }
 }

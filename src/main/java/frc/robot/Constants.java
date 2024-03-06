@@ -13,7 +13,7 @@ public final class Constants {
         public static final int frontLeftID = 4;
         public static final int backRightID = 1;
         public static final int backLeftID = 2;
-
+        
         public static final double RevToMetre = 1188.0 * Math.PI / 82991.96;
         public static final double RPMToMetresPerSecond = 1188.0 * Math.PI / 4979517.6;
 
@@ -25,7 +25,11 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int pivotID = 10;
         public static final int wheelID = 11;
-        public static final int intakeLimit = 3;
+
+        public static final double intakeOutAngle = 0.07;
+        public static final double intakeInAngle = 0.66;
+
+        public static final int intakeBottomLimit = 3;
     }
 
     public static final class ShooterConstants {

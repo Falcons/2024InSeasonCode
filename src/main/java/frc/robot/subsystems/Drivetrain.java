@@ -48,10 +48,10 @@ public class Drivetrain extends SubsystemBase {
     frontRightEncoder.setPosition(0);
     gyro.setYaw(0);
     
-    frontRightEncoder.setPositionConversionFactor(kRevToFeet);
-    frontLeftEncoder.setPositionConversionFactor(kRevToFeet);
-    backRightEncoder.setPositionConversionFactor(kRevToFeet);
-    backLeftEncoder.setPositionConversionFactor(kRevToFeet);
+    frontRightEncoder.setPositionConversionFactor(DriveConstants.RevToMetre);
+    frontLeftEncoder.setPositionConversionFactor(DriveConstants.RevToMetre);
+    backRightEncoder.setPositionConversionFactor(DriveConstants.RevToMetre);
+    backLeftEncoder.setPositionConversionFactor(DriveConstants.RevToMetre);
 
     odometry = new DifferentialDriveOdometry(
       gyro.getRotation2d(), frontLeftEncoder.getPosition(), frontRightEncoder.getPosition());
