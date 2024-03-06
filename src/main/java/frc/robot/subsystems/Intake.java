@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +20,8 @@ public class Intake extends SubsystemBase {
   private final CANSparkMax wheels = new CANSparkMax(IntakeConstants.wheelID, MotorType.kBrushless);
 
   private final SparkAbsoluteEncoder intakeThruBore = pivot.getAbsoluteEncoder();
+
+  private final DigitalInput IntakeLimit = new DigitalInput(IntakeConstants.intakeLimit);
 
   public Intake() {}
 
@@ -45,6 +48,7 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake Thru Bore", intakeThruBore.getPosition());
+    SmartDashboard.putBoolean("Intake Limit", IntakeLimit.get());
   }
 
   public Command IntakeNoteCmd(double speed) {

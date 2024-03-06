@@ -21,8 +21,8 @@ public class Climb extends SubsystemBase {
   private final RelativeEncoder leftLiftEncoder = leftClimb.getEncoder();
   private final RelativeEncoder rightLiftEncoder = rightClimb.getEncoder();
 
-  //private final DigitalInput leftClimbLimit = new DigitalInput(ClimbConstants.leftClimbLimitPort);
-  //private final DigitalInput rightClimbLimit = new DigitalInput(ClimbConstants.rightClimbLimitPort);
+  private final DigitalInput leftClimbLimit = new DigitalInput(ClimbConstants.leftClimbLimitPort);
+  private final DigitalInput rightClimbLimit = new DigitalInput(ClimbConstants.rightClimbLimitPort);
 
   public Climb() {}
 
@@ -45,8 +45,8 @@ public class Climb extends SubsystemBase {
   
   @Override
   public void periodic() {
-    //SmartDashboard.putBoolean("Left Climb Limit", leftClimbLimit.get());
-    //SmartDashboard.putBoolean("Right Climb Limit", rightClimbLimit.get());
+    SmartDashboard.putBoolean("Left Climb Limit", leftClimbLimit.get());
+    SmartDashboard.putBoolean("Right Climb Limit", rightClimbLimit.get());
   }
 
   public Command Up(double speed) {

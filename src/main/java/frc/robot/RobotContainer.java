@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ArcadeDriveCmd;
 import frc.robot.commands.ShooterCommands.Down;
+import frc.robot.commands.ShooterCommands.SetShooterPosition;
 import frc.robot.commands.ShooterCommands.Up;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
@@ -66,6 +67,7 @@ public class RobotContainer {
     //driver.x().whileTrue(shooterpivot.Down(0.1));
     //driver.x().and(pivotLimitSwitch.negate()).onTrue(shooterpivot.Down(0.1));
     driver.x().whileTrue(new Down(shooterpivot, 0.1));
+    driver.leftBumper().onTrue(new SetShooterPosition(shooterpivot, 0.93));
 
     // Climb
     driver.y().whileTrue(climb.Up(0.2));

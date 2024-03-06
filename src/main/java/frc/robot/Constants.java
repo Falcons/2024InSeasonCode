@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public final class Constants {
     public static final class DriveConstants {
         public static final int frontRightID = 3;
@@ -15,11 +18,14 @@ public final class Constants {
         public static final double RPMToMetresPerSecond = 1188.0 * Math.PI / 4979517.6;
 
         public static final int pigeonID = 12;
+
+        HashMap<Double, Double> shooterDistanceValues = new HashMap<Double, Double> ();
     }
 
     public static final class IntakeConstants {
         public static final int pivotID = 10;
         public static final int wheelID = 11;
+        public static final int intakeLimit = 3;
     }
 
     public static final class ShooterConstants {

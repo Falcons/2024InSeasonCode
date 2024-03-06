@@ -16,12 +16,15 @@ public class Shooter extends SubsystemBase {
 
   public Shooter() {
     rightFlywheel.setInverted(true);
+
+    double leftSpeed = leftFlywheel.get();
+    double rightSpeed = rightFlywheel.get();
+
   }
 
   public void fire(double leftSpeed, double rightSpeed) {
     leftFlywheel.set(leftSpeed);
     rightFlywheel.set(rightSpeed);
-    
   }
 
   public void stopShooter() {

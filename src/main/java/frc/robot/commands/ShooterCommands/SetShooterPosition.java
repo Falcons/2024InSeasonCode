@@ -18,7 +18,7 @@ public class SetShooterPosition extends Command {
   public SetShooterPosition(ShooterPivot shooterpivot, double pos) {
     this.shooterpivot = shooterpivot;
     this.pos = pos;
-    this.pid = new PIDController(0, 0, 0);
+    this.pid = new PIDController(0.01, 0, 0);
     this.armFF = new ArmFeedforward(0, 0, 0, 0);
     addRequirements(shooterpivot);
   }
