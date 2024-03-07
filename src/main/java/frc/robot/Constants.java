@@ -17,6 +17,8 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int pivotID = 10;
         public static final int wheelID = 11;
+        public static final int noteDetectorID = 0;
+        public static final double noteRange = 0;
     }
 
     public static final class ShooterConstants {

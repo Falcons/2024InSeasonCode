@@ -25,7 +25,7 @@ public class IntakePivot extends SubsystemBase {
   public IntakePivot() {}
 
   public void set(double speed){
-    if(limit.isPressed() && speed>0) {pivot.stopMotor(); return;}
+    // if(limit.isPressed() && speed>0) {pivot.stopMotor(); return;} //stops if moveing towerds limit well on limit
     pivot.set(speed); 
   }
 
@@ -36,9 +36,11 @@ public class IntakePivot extends SubsystemBase {
   public double getPivotPosition(){
     return encoder.getPosition();
   }
-
   public double getThroughBorePosition(){
     return TBEncoder.getPosition();
+  }
+  public boolean getLimit(){
+    return limit.isPressed();
   }
   @Override
   public void periodic() {
