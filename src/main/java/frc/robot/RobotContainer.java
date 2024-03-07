@@ -34,7 +34,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
       new ArcadeDriveCmd(drivetrain, 
       () -> -driver.getLeftY(), 
-      () -> driver.getRightX()));
+      () -> -driver.getRightX()));
 
     climb.setDefaultCommand(
       new RunCommand(() -> climb.setClimb(
@@ -47,17 +47,25 @@ public class RobotContainer {
 
   private void configureBindings() {
     shooterpivot.stopShooterPivot();
-    // Intake and Eject
+
+    driver.leftBumper().whileTrue(
+      new RunCommand(() -> drivetrain.arcadeDriveManual(
+        -driver.getLeftY(), 
+        -driver.getRightX()),
+         drivetrain));
+
+  
+    // Intake wheels manual
     operator.b().whileTrue(intake.IntakeNoteCmd(0.3));
     operator.a().whileTrue(intake.EjectNoteCmd(1));
 
     // Intake Manual
-    operator.povUp().whileTrue(intake.Extend(0.3));
-    operator.povDown().whileTrue(intake.Retract(0.3));
+    //operator.povUp().whileTrue(intake.Extend(0.3));
+    //operator.povDown().whileTrue(intake.Retract(0.3));
 
     //Intake PID Test
-    operator.povLeft().onTrue(new Extend(intake));
-    operator.povRight().onTrue(new Retract(intake));
+    operator.povUp().onTrue(new Extend(intake));
+    operator.povDown().onTrue(new Retract(intake));
 
     //intake compound
     operator.rightBumper().onTrue(
@@ -68,17 +76,18 @@ public class RobotContainer {
     operator.x().whileTrue(shooter.Shoot(0.5, 0.5));
     operator.y().whileTrue(shooter.Shoot(1, 0.95));
 
+
+    // shooter variable
+    operator.leftTrigger(0.5).whileTrue(shooter.Shoot(0.5, 0.5).unless(operator.leftTrigger(0.9)));
+    operator.leftTrigger(0.9).whileTrue(shooter.Shoot(1, 0.95));
+
     // Shooter Pivot Manual
     driver.b().whileTrue(new Up(shooterpivot, 0.1)); // moves shooter up //0.0125 value to hold pos from encoder value 0.85 to < 0.945 0.945 - 0.955 hold with vaule 0 0.955 < - 0.99 hold  pos with opposite 0.0125, move shoooter with 0.025 value (up) for down let gravity take it
     driver.x().whileTrue(new Down(shooterpivot, 0.1));
     //driver.x().and(pivotLimitSwitch.negate()).onTrue(shooterpivot.Down(0.1));
 
     //Shooter PID test
-    operator.leftBumper().whileTrue(new SetShooterPosition(shooterpivot, 0.95));
-
-    // Climb
-    //driver.y().whileTrue(climb.Up(0.2));
-    //driver.a().whileTrue(climb.Down(0.2));
+    operator.leftBumper().whileTrue(new SetShooterPosition(shooterpivot, 0.95).unless(shooterpivot::getSoftUpperLimit));
   }
 
   public Command getAutonomousCommand() {

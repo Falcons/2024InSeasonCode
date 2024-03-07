@@ -30,7 +30,7 @@ public class Drivetrain extends SubsystemBase {
   private final RelativeEncoder backRightEncoder = backRight.getEncoder();
   private final RelativeEncoder backLeftEncoder = backLeft.getEncoder();
 
-  private final DifferentialDrive drive = new DifferentialDrive(frontLeft, frontRight);
+  private final DifferentialDrive drive = new DifferentialDrive(frontLeft::set, frontRight::set);
 
   private final DifferentialDriveOdometry odometry;
 
@@ -41,8 +41,6 @@ public class Drivetrain extends SubsystemBase {
     backLeft.follow(frontLeft);
 
     frontRight.setInverted(true);
-    drive.setMaxOutput(0.2);
-
 
     frontLeftEncoder.setPosition(0);
     frontRightEncoder.setPosition(0);
@@ -64,7 +62,7 @@ public class Drivetrain extends SubsystemBase {
     drive.tankDrive(leftSpeed, rightSpeed);
   }
 
-  public void arcadeDrive(double speed, double rotation) {
+  public void arcadeDriveManual(double speed, double rotation) {
     if (speed < 0.1 && speed > -0.1) {
       speed = 0;
     }
@@ -74,6 +72,10 @@ public class Drivetrain extends SubsystemBase {
 
       frontLeft.set(speed + rotation);
       frontRight.set(speed - rotation);
+  }
+
+  public void arcadeDrive(double speed, double rotation) {
+    drive.arcadeDrive(speed, rotation);
   }
 
   @Override

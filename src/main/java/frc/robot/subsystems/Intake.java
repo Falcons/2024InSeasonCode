@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
@@ -22,6 +23,8 @@ public class Intake extends SubsystemBase {
   private final SparkAbsoluteEncoder intakeThruBore = pivot.getAbsoluteEncoder();
 
   private final DigitalInput intakeLimit = new DigitalInput(IntakeConstants.intakeBottomLimit);
+
+  private final TimeOfFlight tof = new TimeOfFlight(0);
 
   public Intake() {}
 
@@ -53,10 +56,19 @@ public class Intake extends SubsystemBase {
     return (intakeThruBore.getPosition() > IntakeConstants.intakeInAngle);
   }
 
+  public boolean getUpperSoftLimit() {
+    return (intakeThruBore.getPosition() < IntakeConstants.intakeOutAngle);
+  }
+
+  public double getTOF() {
+    return tof.getRange();
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Intake Thru Bore", intakeThruBore.getPosition());
     SmartDashboard.putBoolean("Intake Limit", intakeLimit.get());
+    SmartDashboard.putNumber("TOF", tof.getRange());
   }
 
   public Command IntakeNoteCmd(double speed) {
