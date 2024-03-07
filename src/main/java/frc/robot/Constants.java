@@ -38,18 +38,15 @@ public final class Constants {
     public static final class IntakeConstants {
         public static final int pivotID = 10;
         public static final int wheelID = 11;
+        public static final int noteDetectorID = 0;
+        public static final double noteRange = 0;
     }
 
     public static final class ShooterConstants {
         public static final int leftFlywheelID = 6;
         public static final int rightFlywheelID = 5;
-
         public static final int pivotID = 7;
         public static final double pivotThruBoreToRadians = 2.0 * Math.PI / 8192.0;
-
-        public static final int pivotBottomLimitPort = 0;
-
-
     }
 
     public static final class ClimbConstants {
