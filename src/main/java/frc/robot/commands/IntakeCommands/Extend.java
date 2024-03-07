@@ -5,15 +5,15 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake.Wheels;
+import frc.robot.subsystems.Intake.IntakePivot;
 
-public class IntakeNote extends Command {
-  private final Wheels wheels;
-  private final double speed;
-  public IntakeNote(Wheels wheels, double speed) {
-    this.wheels = wheels;
-    this.speed = speed;
-    addRequirements(wheels);
+public class Extend extends Command {
+  /** Creates a new Extend. */
+  private final IntakePivot intakePivot;
+  public Extend(IntakePivot intakePivot) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.intakePivot = intakePivot;
+    addRequirements(intakePivot);
   }
 
   // Called when the command is initially scheduled.
@@ -23,18 +23,18 @@ public class IntakeNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    wheels.set(-speed);
+    intakePivot.set(-1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    wheels.stop();
+    intakePivot.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return wheels.hasNote();
+    return intakePivot.getLimit();
   }
 }

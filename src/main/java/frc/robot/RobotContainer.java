@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveForward;
+import frc.robot.commands.IntakeCommands.ExtendThenIntake;
 import frc.robot.commands.IntakeCommands.IntakeNote;
 import frc.robot.commands.IntakeCommands.ManualIntakePivot;
 import frc.robot.commands.ShooterCommands.Shoot;
@@ -43,21 +44,21 @@ public class RobotContainer {
          drivetrain));
 
     leftClimb.setDefaultCommand(new RunCommand(() -> leftClimb.set(-operator.getLeftY())));
-    leftClimb.setDefaultCommand(new RunCommand(() -> rightClimb.set(-operator.getLeftY())));
+    rightClimb.setDefaultCommand(new RunCommand(() -> rightClimb.set(-operator.getLeftY())));
     configureBindings();
   }
 
   private void configureBindings() {
     // Intake and Eject
-    operator.a().whileTrue(intakeWheels.IntakeNoteCmd(0.3));
     operator.b().whileTrue(intakeWheels.EjectNoteCmd(1));
+    operator.x().onTrue(new IntakeNote(intakeWheels, 1)); //temp/testing
+    operator.y().onTrue(new ExtendThenIntake(intakePivot, intakeWheels)); //temp/testing
 
-    operator.leftBumper().whileTrue(intakePivot.Extend(0.3));
-    operator.rightBumper().whileTrue(intakePivot.Retract(0.3));
+    operator.leftBumper().whileTrue(intakePivot.Retract(0.3));
+    operator.rightBumper().whileTrue(intakePivot.Extend(0.3));
 
     //shooter
-    operator.x().whileTrue(shooterFlywheel.Shoot(0.5, 0.5));
-    operator.y().whileTrue(shooterFlywheel.Shoot(1, 0.95));
+    operator.rightTrigger().whileTrue(shooterFlywheel.Shoot(operator.getRightTriggerAxis(), operator.getRightTriggerAxis()*0.95));
 
     // Shooter Pivot
 
@@ -71,10 +72,7 @@ public class RobotContainer {
     //driver.x().whileTrue(new Down(shooterpivot, 0.1));
 
     // Climb
-    driver.y().whileTrue(leftClimb.Up(0.2));
-    driver.y().whileTrue(rightClimb.Up(0.2));
-    driver.a().whileTrue(leftClimb.Down(0.2));
-    driver.a().whileTrue(rightClimb.Down(0.2));
+
   }
 
   public Command getAutonomousCommand() {
