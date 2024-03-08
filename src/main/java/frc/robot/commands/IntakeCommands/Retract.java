@@ -8,28 +8,31 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakePivot;
+import frc.robot.subsystems.Intake.Wheels;
 
 public class Retract extends Command {
-  private final Intake intake;
+  private final IntakePivot intakePivot;
+  private final Wheels intakeWheels;
   private final PIDController pid;
-  public Retract(Intake intake) {
-    this.intake = intake;
+  public Retract(IntakePivot intakePivot , Wheels intakeWheels) {
+    this.intakePivot = intakePivot;
+    this.intakeWheels = intakeWheels;
     this.pid = new PIDController(1, 0, 0);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.IntakeNote(0);
+    intakeWheels.stop();
     pid.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = -pid.calculate(intake.getIntakeAngle(), IntakeConstants.intakeInAngle);
-    intake.pivotSpeed(speed);
+    double speed = -pid.calculate(intakePivot.getIntakeAngle(), IntakeConstants.intakeInAngle);
+    intakePivot.set(speed);
     SmartDashboard.putNumber("error", pid.getPositionError());
   }
 
@@ -40,6 +43,6 @@ public class Retract extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.getBottomSoftLimit();
+    return intakePivot.getBottomSoftLimit();
   }
 }

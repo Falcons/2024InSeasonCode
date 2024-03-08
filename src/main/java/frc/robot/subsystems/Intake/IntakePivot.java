@@ -11,6 +11,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkLimitSwitch;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,8 +21,9 @@ public class IntakePivot extends SubsystemBase {
   /** Creates a new Pivot. */
   private final CANSparkMax pivot = new CANSparkMax(IntakeConstants.pivotID, MotorType.kBrushless);
   private final RelativeEncoder encoder = pivot.getEncoder();
-  private final SparkAbsoluteEncoder TBEncoder = pivot.getAbsoluteEncoder();
-  private final SparkLimitSwitch limit = pivot.getReverseLimitSwitch(Type.kNormallyOpen);
+  private final SparkAbsoluteEncoder ThruBore = pivot.getAbsoluteEncoder();
+  private final DigitalInput limit = new DigitalInput(IntakeConstants.intakeBottomLimit);
+
   public IntakePivot() {}
 
   public void set(double speed){
@@ -33,21 +35,24 @@ public class IntakePivot extends SubsystemBase {
     pivot.stopMotor();
   }
 
-  public double getPivotPosition(){
-    return encoder.getPosition();
+  public double getIntakeAngle() {
+    return ThruBore.getPosition();
   }
-  public double getThroughBorePosition(){
-    return TBEncoder.getPosition();
+  public boolean getBottomSoftLimit() {
+    return (ThruBore.getPosition() > IntakeConstants.intakeInAngle);
+  }
+  public boolean getUpperSoftLimit() {
+    return (ThruBore.getPosition() < IntakeConstants.intakeOutAngle);
   }
   public boolean getLimit(){
-    return limit.isPressed();
+    return limit.get();
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("intake pivot encoder", encoder.getPosition());
-    SmartDashboard.putNumber("intake through bore encoder", TBEncoder.getPosition());
-    SmartDashboard.putBoolean("intake pivot limit", limit.isPressed());
+    SmartDashboard.putNumber("intake through bore encoder", ThruBore.getPosition());
+    SmartDashboard.putBoolean("intake pivot limit", limit.get());
   }
 
   public Command Extend(double speed) {return this.startEnd(() -> this.set(-speed), () -> this.stop());}

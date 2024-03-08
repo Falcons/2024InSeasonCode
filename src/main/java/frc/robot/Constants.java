@@ -40,7 +40,7 @@ public final class Constants {
         public static final int pivotID = 7;
         public static final double pivotThruBoreToRadians = 2.0 * Math.PI;
         public static final double thruBoreZeroOffset = 0;
-
+        public static final int ShooterLimitSwitch = 0;
     }
 
     public static final class ClimbConstants {

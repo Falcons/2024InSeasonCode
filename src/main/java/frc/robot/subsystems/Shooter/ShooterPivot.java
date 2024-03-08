@@ -7,9 +7,7 @@ package frc.robot.subsystems.Shooter;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkLimitSwitch.Type;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,8 +17,7 @@ import frc.robot.Constants.ShooterConstants;
 
 public class ShooterPivot extends SubsystemBase {
   private final CANSparkMax pivot = new CANSparkMax(ShooterConstants.pivotID,  MotorType.kBrushless);
-  private final DigitalInput limit = new DigitalInput(0);
-  // private final SparkLimitSwitch limit = pivot.getForwardLimitSwitch(Type.kNormallyOpen);
+  private final DigitalInput limit = new DigitalInput(ShooterConstants.ShooterLimitSwitch);
   private final RelativeEncoder pivotEncoder = pivot.getEncoder();
   private final SparkAbsoluteEncoder thruBore = pivot.getAbsoluteEncoder();
 
