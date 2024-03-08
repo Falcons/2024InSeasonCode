@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.DriveForward;
+import frc.robot.commands.DriveCommands.DriveForward;
 import frc.robot.commands.IntakeCommands.ExtendThenIntake;
 import frc.robot.commands.IntakeCommands.IntakeNote;
 import frc.robot.commands.IntakeCommands.ManualIntakePivot;
@@ -34,6 +34,7 @@ import frc.robot.subsystems.Intake.Wheels;
 import frc.robot.subsystems.Shooter.ShooterPivot;
 import frc.robot.subsystems.Intake.IntakePivot;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter.Flywheel;
 
 public class RobotContainer {
@@ -44,6 +45,7 @@ public class RobotContainer {
   private final IntakePivot intakePivot = new IntakePivot();
   private final Flywheel shooterFlywheel = new Flywheel();
   private final ShooterPivot shooterpivot = new ShooterPivot();
+  private final Limelight limelight = new  Limelight("limelight-shooter");
 
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -108,20 +110,19 @@ public class RobotContainer {
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
-    Trajectory exampleTrajectory =
+    Trajectory speakerCenter =
         TrajectoryGenerator.generateTrajectory(
             // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            new Pose2d(limelight.getBotPose()[0], limelight.getBotPose()[1], new Rotation2d(limelight.getBotPose()[5])),
+            List.of(),
             // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
+            new Pose2d(6, 0, new Rotation2d(0)),
             // Pass config
             config);
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            exampleTrajectory,
+            speakerCenter,
             drivetrain::getPose,
             new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
             new SimpleMotorFeedforward(
@@ -136,7 +137,7 @@ public class RobotContainer {
             drivetrain::tankDriveVolts,
             drivetrain);
         
-    return Commands.runOnce(() -> drivetrain.resetOdometry(exampleTrajectory.getInitialPose()))
+    return Commands.runOnce(() -> drivetrain.resetOdometry(speakerCenter.getInitialPose()))
       .andThen(ramseteCommand)
       .andThen(Commands.runOnce(() -> drivetrain.tankDriveVolts(0, 0)));
   }
