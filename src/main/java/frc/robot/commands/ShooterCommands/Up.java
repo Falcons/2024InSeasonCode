@@ -5,7 +5,7 @@
 package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterPivot;
+import frc.robot.subsystems.Shooter.ShooterPivot;
 
 public class Up extends Command {
   private final ShooterPivot shooterpivot;
@@ -23,19 +23,19 @@ public class Up extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterpivot.setSpeed(-speed);
+    shooterpivot.set(-speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterpivot.setSpeed(0.05);
-    shooterpivot.stopShooterPivot();
+    shooterpivot.set(0.05);
+    shooterpivot.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (shooterpivot.getSoftUpperLimit());
+    return (shooterpivot.getSoftLimit());
   }
 }

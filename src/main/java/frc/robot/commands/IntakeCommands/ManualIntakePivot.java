@@ -5,16 +5,15 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakePivot;
 
 public class ManualIntakePivot extends Command {
-  private final Intake intake;
+  private final IntakePivot pivot;
   private final double speed;
-
-  public ManualIntakePivot(Intake intake, double speed) {
-    this.intake = intake;
+  public ManualIntakePivot(IntakePivot pivot, double speed) {
+    this.pivot = pivot;
     this.speed = speed;
-    addRequirements(intake);
+    addRequirements(pivot);
   }
 
   // Called when the command is initially scheduled.
@@ -24,13 +23,13 @@ public class ManualIntakePivot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.pivotSpeed(speed);
+    pivot.set(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.pivotSpeed(0);
+    pivot.stop();
   }
 
   // Returns true when the command should end.

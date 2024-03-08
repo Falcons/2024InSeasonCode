@@ -6,13 +6,13 @@ package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake.IntakePivot;
 
 public class SetIntakePosition extends Command {
-  private final Intake intake;
+  private final IntakePivot intake;
   private final PIDController pid;
 
-  public SetIntakePosition(Intake intake) {
+  public SetIntakePosition(IntakePivot intake) {
     this.intake = intake;
     this.pid = new PIDController(0, 0, 0);
   }
@@ -25,7 +25,7 @@ public class SetIntakePosition extends Command {
   @Override
   public void execute() {
     double speed = pid.calculate(0);
-    intake.pivotSpeed(speed);
+    intake.set(speed);
   }
 
   // Called once the command ends or is interrupted.

@@ -7,7 +7,7 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterPivot;
+import frc.robot.subsystems.Shooter.ShooterPivot;
 
 public class SetShooterPosition extends Command {
   private final ShooterPivot shooterpivot;
@@ -33,8 +33,8 @@ public class SetShooterPosition extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = (pid.calculate(shooterpivot.getThruBore(), pos));
-    shooterpivot.setSpeed(-speed);
+    double speed = (pid.calculate(shooterpivot.getPosition(), pos));
+    shooterpivot.set(-speed);
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +44,6 @@ public class SetShooterPosition extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooterpivot.getSoftUpperLimit();
+    return shooterpivot.getSoftLimit();
   }
 }
