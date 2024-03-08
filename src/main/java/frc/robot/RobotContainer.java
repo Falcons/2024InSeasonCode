@@ -23,11 +23,14 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.DriveCommands.DriveToTarget;
+import frc.robot.commands.DriveCommands.MoveToShooter;
 import frc.robot.commands.ShooterCommands.Down;
 import frc.robot.commands.ShooterCommands.Up;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterPivot;
 
@@ -37,6 +40,9 @@ public class RobotContainer {
   private final Intake intake = new Intake();
   private final Shooter shooter = new Shooter();
   private final ShooterPivot shooterpivot = new ShooterPivot();
+  private final Limelight limelightIntake = new Limelight("limelight-intake");
+  private final Limelight limelightShooter = new Limelight("limelight-shooter");
+
 
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -89,54 +95,26 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(
-                DriveConstants.ks,
-                DriveConstants.kv,
-                DriveConstants.ka),
-            DriveConstants.kDriveKinematics,
-            10);
+    
+    //move to centre
+    new MoveToShooter(drivetrain, limelightShooter.getBotPose(), limelightShooter);
 
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-                DriveConstants.kMaxSpeedMetersPerSecond,
-                DriveConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DriveConstants.kDriveKinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
+    //Aim doesnt exist
 
-    Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
-            // Pass config
-            config);
+    //SHOOT test
+    shooter.Shoot(0.5, 0.5);
+    shooter.Shoot(1, 0.95);
 
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            exampleTrajectory,
-            drivetrain::getPose,
-            new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                DriveConstants.ks,
-                DriveConstants.kv,
-                DriveConstants.ka),
-            DriveConstants.kDriveKinematics,
-            drivetrain::getWheelSpeeds,
-            new PIDController(DriveConstants.kPVel, 0, 0),
-            new PIDController(DriveConstants.kPVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            drivetrain::tankDriveVolts,
-            drivetrain);
-        
-    return Commands.runOnce(() -> drivetrain.resetOdometry(exampleTrajectory.getInitialPose()))
-      .andThen(ramseteCommand)
-      .andThen(Commands.runOnce(() -> drivetrain.tankDriveVolts(0, 0)));
+    //move to note
+    new DriveToTarget(drivetrain, "limelight-intake", "note", limelightIntake);
+
+    //PICK UP test
+    intake.Extend(0.3);
+    intake.IntakeNoteCmd(0.3);
+    intake.Retract(0.3);
+    intake.EjectNoteCmd(1);
+
+    //return
+    return Commands.print("auto on");
   }
 }
