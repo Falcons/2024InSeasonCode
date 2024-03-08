@@ -101,14 +101,14 @@ public class RobotContainer {
 
     //Aim doesnt exist
 
-    //SHOOT test
+    //SHOOT test -- make work
     shooter.Shoot(0.5, 0.5);
     shooter.Shoot(1, 0.95);
 
     //move to note
     new DriveToTarget(drivetrain, "limelight-intake", "note", limelightIntake);
 
-    //PICK UP test
+    //PICK UP test -- make work
     intake.Extend(0.3);
     intake.IntakeNoteCmd(0.3);
     intake.Retract(0.3);

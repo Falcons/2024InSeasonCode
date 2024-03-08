@@ -42,19 +42,47 @@ public class MoveToShooter extends Command {
     bp = this.limelight.getBotPose();
 
     double robotAngle = bp[5];
-    double xToMove = bp[0] - 0.87;
-    double yToMove = bp[1] - (-5.6);
+    double xToMove;
+    double yToMove;
+
+    //setpoints
+    if (bp[1] > 3){
+    xToMove = bp[0] - 2; //change
+    yToMove = bp[1] - (-5.5); //change
+    }
+    else if (bp[1] < -3){
+      xToMove = bp[0] - (-0.5); //change
+      yToMove = bp[1] - (-5.5); //change
+    }
+    else{
+      xToMove = bp[0] - 0.87; //change
+      yToMove = bp[1] - (-5.5); //change
+    }
     double hypMove = Math.sqrt(Math.pow(yToMove, 2) + Math.pow(xToMove, 2));
-    double angleMove = Math.acos(yToMove/hypMove) + robotAngle;
+    double angleMove = Math.asin(yToMove/hypMove) + robotAngle; //make sure math is good
+
+    //move to shooter
 
     if (hypMove > 0) {
-       drivetrain.arcadeDrive(-pid.calculate(hypMove, 0), gyroPID.calculate(angleMove, 0));
+       drivetrain.arcadeDrive(-pid.calculate(hypMove, 0), gyroPID.calculate(angleMove, 0));//it may not be 0
+      // make sure to change. AND the robot may need to go backwards
     }
     else {
        drivetrain.arcadeDrive(0,0);
        SmartDashboard.putNumber("distance", hypMove);
     }
-    drivetrain.arcadeDrive(-pid.calculate(0, 0), gyroPID.calculate(gyro.getAngle(), 0));
+
+    //turn to face shooter
+
+    if (bp[1] > 3){
+      drivetrain.arcadeDrive(-pid.calculate(0, 0), gyroPID.calculate(gyro.getAngle(), -30)); //change
+    }
+    else if (bp[1] < -3){
+      drivetrain.arcadeDrive(-pid.calculate(0, 0), gyroPID.calculate(gyro.getAngle(), 30)); //change
+    }
+    else{
+      drivetrain.arcadeDrive(-pid.calculate(0, 0), gyroPID.calculate(gyro.getAngle(), 0)); //change
+    }
   }
   // Called once the command ends or is interrupted.
   @Override

@@ -69,7 +69,7 @@ public class DriveToTarget extends Command {
     targetOffsetAngleVertical = this.note_y;
 
     // height of limelight lens from ground in inches
-    double limelightLensHeightInches = type.equals("limelight-intake") ? 8 : 8; //change
+    double limelightLensHeightInches = type.equals("limelight-intake") ? 8 : 8; //change values
     // height of target from ground in inches
     double targetHeight;
     if (type.equals("limelight-intake")) {

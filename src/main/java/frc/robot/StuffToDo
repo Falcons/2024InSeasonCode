@@ -1,0 +1,16 @@
+    Make sure limelight names are correct(easy)
+    
+    Change limelight hights(easy)
+    
+    Add auto shoot, add auto pick up functions(easy)
+    Make sure movement is not inverted(easy)
+
+    Make setpoint coordinates corect(hard)
+    Make setpoint angles correct(hard)
+
+    If cant find anything make sure it looks around(medium)
+
+    merge with tragectory code(hard)
+    how:
+        orgin = limelight orgin
+        than go to set cooridinates
