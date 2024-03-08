@@ -27,12 +27,12 @@ import frc.robot.commands.DriveCommands.DriveToTarget;
 import frc.robot.commands.DriveCommands.MoveToShooter;
 import frc.robot.commands.ShooterCommands.Down;
 import frc.robot.commands.ShooterCommands.Up;
-import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ShooterPivot;
+import frc.robot.subsystems.Climb.Climb;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.ShooterPivot;
 
 public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();

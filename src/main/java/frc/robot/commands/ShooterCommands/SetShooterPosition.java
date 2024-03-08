@@ -7,7 +7,7 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterPivot;
+import frc.robot.subsystems.Shooter.ShooterPivot;
 
 public class SetShooterPosition extends Command {
   private final ShooterPivot shooterpivot;
