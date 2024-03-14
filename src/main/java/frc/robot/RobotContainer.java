@@ -22,7 +22,8 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands.DriveForward;
-import frc.robot.commands.IntakeCommands.ExtendThenIntake;
+import frc.robot.commands.DriveCommands.DriveToTarget;
+import frc.robot.commands.IntakeCommands.FullAutoIntake;
 import frc.robot.commands.IntakeCommands.IntakeNote;
 import frc.robot.commands.IntakeCommands.ManualIntakePivot;
 import frc.robot.Constants.DriveConstants;
@@ -45,7 +46,8 @@ public class RobotContainer {
   private final IntakePivot intakePivot = new IntakePivot();
   private final Flywheel shooterFlywheel = new Flywheel();
   private final ShooterPivot shooterpivot = new ShooterPivot();
-  private final Limelight limelight = new  Limelight("limelight-shooter");
+  private final Limelight limelightshooter = new  Limelight("limelight-shooter");
+  private final Limelight limelightIntake = new  Limelight("limelight-intake");
 
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
@@ -68,7 +70,7 @@ public class RobotContainer {
     // Intake and Eject
     operator.b().whileTrue(intakeWheels.EjectNoteCmd(1));
     operator.x().onTrue(new IntakeNote(intakeWheels, 1)); //temp/testing
-    operator.y().onTrue(new ExtendThenIntake(intakePivot, intakeWheels)); //temp/testing
+    operator.y().onTrue(new FullAutoIntake(intakePivot, intakeWheels)); //temp/testing
 
     operator.leftBumper().whileTrue(intakePivot.Retract(0.3));
     operator.rightBumper().whileTrue(intakePivot.Extend(0.3));
@@ -113,7 +115,7 @@ public class RobotContainer {
     Trajectory speakerCenter =
         TrajectoryGenerator.generateTrajectory(
             // Start at the origin facing the +X direction
-            new Pose2d(limelight.getBotPose()[0], limelight.getBotPose()[1], new Rotation2d(limelight.getBotPose()[5])),
+            new Pose2d(limelightshooter.getBotPose()[0], limelightshooter.getBotPose()[1], new Rotation2d(limelightshooter.getBotPose()[5])),
             List.of(),
             // End 3 meters straight ahead of where we started, facing forward
             new Pose2d(6, 0, new Rotation2d(0)),
@@ -137,8 +139,11 @@ public class RobotContainer {
             drivetrain::tankDriveVolts,
             drivetrain);
         
-    return Commands.runOnce(() -> drivetrain.resetOdometry(speakerCenter.getInitialPose()))
+    return Commands.run(() -> drivetrain.resetOdometry(speakerCenter.getInitialPose()))
       .andThen(ramseteCommand)
-      .andThen(Commands.runOnce(() -> drivetrain.tankDriveVolts(0, 0)));
+      .andThen(Commands.runOnce(() -> drivetrain.tankDriveVolts(0, 0))
+      .andThen(new Shoot(shooterFlywheel, 1,0.95))
+      .andThen(new FullAutoIntake(intakePivot, intakeWheels))
+      .alongWith(new DriveToTarget(drivetrain, "limelight-intake", "note", limelightIntake)));
   }
 }

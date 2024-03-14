@@ -11,9 +11,9 @@ import frc.robot.subsystems.Intake.Wheels;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ExtendThenIntake extends SequentialCommandGroup {
+public class FullAutoIntake extends SequentialCommandGroup {
   /** Creates a new ExtendThenIntake. */
-  public ExtendThenIntake(IntakePivot intakePivot, Wheels wheels) {
+  public FullAutoIntake(IntakePivot intakePivot, Wheels wheels) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new Extend(intakePivot), new IntakeNote(wheels, 1));
